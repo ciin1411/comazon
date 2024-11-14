@@ -9,7 +9,26 @@ const app = express();
 app.use(express.json());
 
 app.get("/users", async (req, res) => {
-  const users = await prisma.user.findMany();
+  /**
+   * offset: 데이터를 몇개를 건너 뛸건지
+   * limit : 한번에 조회할 데이터의 개수
+   * limit과 offset를 활용하여 pagination을 구현할 수 있다.
+   */
+  const { offset = 0, limit = 10, order = "newest" } = req.query;
+  let orderBy;
+  switch (order) {
+    case "oldest":
+      orderBy = { createdAt: "asc" };
+      break;
+    case "newest":
+    default:
+      orderBy = { createdAt: "desc" };
+  }
+  const users = await prisma.user.findMany({
+    orderBy,
+    skip: parseInt(offset),
+    take: parseInt(limit),
+  });
   res.send(users);
 });
 

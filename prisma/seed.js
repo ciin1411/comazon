@@ -11,6 +11,7 @@ async function main() {
   await prisma.user.createMany({
     data: USERS,
     skipDuplicates: true,
+    // 유니크한 필드가 중복되는 데이터들은 스킵하라는 뜻
   });
 }
 
