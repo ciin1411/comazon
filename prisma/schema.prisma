@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  // @id: 데이터를 식별하는 고유 id역할을 한다고 알려주는 것
+  // @unique: 데이터베이스에서 중복되면 에러를 발생시킨다.
+  // @default: default value를 설정할 수 있다.
+  // ? : 옵셔널하게 해서 비울수도 있음
+  id        String   @id @default(uuid())
+  email     String   @unique
+  firstName String
+  lastName  String
+  address   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
